@@ -1,0 +1,23 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #eaf7ff;
+  background: #050b1a;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(1000px 700px at 20% 0%,#153768,#050b1a 60%)}
+.page{padding:24px;display:flex;justify-content:center}
+.card{width:100%;max-width:760px;background:rgba(11,23,46,.86);border:1px solid #2f4f85;border-radius:16px;padding:20px}
+h1{margin:0 0 8px}
+.subtitle{margin:0 0 14px;color:#b8d1ee}
+.panel{background:#08152e;border:1px solid #2d4b84;border-radius:12px;padding:12px;margin-top:10px}
+button{border:0;border-radius:10px;padding:10px 14px;background:linear-gradient(135deg,#2f8fff,#775bff);color:#fff;font-weight:700;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.stats span{background:#08152e;border:1px solid #2d4b84;border-radius:10px;padding:8px;font-size:14px}
+.inverse strong{color:#ffb18a}
+.command{margin-top:12px;text-align:center;background:#071126;border:1px solid #34548f;border-radius:14px;padding:16px}
+.command .label{color:#8cb1da;font-size:12px;letter-spacing:.08em}
+.command .value{font-size:42px;font-weight:800;line-height:1.1}
+.command .hint{color:#aad0ff}
+.warning{margin-top:8px;color:#ffbe9f;font-weight:700}
+.narrator{margin-top:10px;color:#9dd0ff}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.command .value{font-size:34px}}
