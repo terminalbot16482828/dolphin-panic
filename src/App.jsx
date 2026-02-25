@@ -25,6 +25,7 @@ export default function App() {
   const [narrator, setNarrator] = useState(NARRATOR_LINES[0]);
 
   const timerRef = useRef(null);
+  const touchStartRef = useRef({ x: 0, y: 0, active: false });
 
   const speedMs = useMemo(() => Math.max(1400 - score * 25, 450), [score]);
 
@@ -99,6 +100,36 @@ export default function App() {
     }
   }
 
+  function onTouchStart(e) {
+    const t = e.changedTouches?.[0];
+    if (!t) return;
+    touchStartRef.current = { x: t.clientX, y: t.clientY, active: true };
+  }
+
+  function onTouchEnd(e) {
+    if (!touchStartRef.current.active) return;
+    const t = e.changedTouches?.[0];
+    if (!t) return;
+
+    const dx = t.clientX - touchStartRef.current.x;
+    const dy = t.clientY - touchStartRef.current.y;
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+    touchStartRef.current.active = false;
+
+    const threshold = 30;
+    if (absX < threshold && absY < threshold) return;
+
+    let mappedKey;
+    if (absX > absY) {
+      mappedKey = dx > 0 ? 'S' : 'A'; // right: SPIN, left: DIVE
+    } else {
+      mappedKey = dy > 0 ? 'F' : 'D'; // down: SURFACE, up: ECHO
+    }
+
+    handleInput(mappedKey);
+  }
+
   useEffect(() => {
     function onKey(e) {
       handleInput(e.key);
@@ -117,6 +148,7 @@ export default function App() {
         {!started && !gameOver && (
           <div className="panel">
             <p><strong>Controls:</strong> A = DIVE, S = SPIN, D = ECHO, F = SURFACE</p>
+            <p><strong>Swipe:</strong> Left = A, Right = S, Up = D, Down = F</p>
             <p>At score 8+, <strong>INVERSE MODE</strong> activates: press any key EXCEPT the shown one.</p>
             <button onClick={startGame}>Start Panic</button>
           </div>
@@ -133,10 +165,11 @@ export default function App() {
 
             {started && (
               <>
-                <div className="command">
+                <div className="command" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                   <div className="label">COMMAND</div>
                   <div className="value">{command.label}</div>
                   <div className="hint">{command.hint}</div>
+                  <div className="swipeHint">Swipe: ⬅️ A | ➡️ S | ⬆️ D | ⬇️ F</div>
                   {mode === 'inverse' && <div className="warning">INVERSE: Press any key except {command.key}</div>}
                 </div>
 
