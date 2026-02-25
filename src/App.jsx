@@ -83,21 +83,25 @@ export default function App() {
     if (score >= 8) setMode('inverse');
   }, [score, started]);
 
+  function handleInput(rawKey) {
+    if (!started) return;
+    const pressed = rawKey.toUpperCase();
+    const isCorrect = pressed === command.key;
+    const shouldSucceed = mode === 'normal' ? isCorrect : !isCorrect;
+
+    if (shouldSucceed) {
+      setScore((s) => s + 1);
+      setStreak((s) => s + 1);
+      if ((streak + 1) % 4 === 0) randomLine();
+      randomCommand();
+    } else {
+      endGame(mode === 'inverse' ? 'Wrong. In inverse mode you must press ANY OTHER key.' : 'Wrong key. Dolphin panic consumed you.');
+    }
+  }
+
   useEffect(() => {
     function onKey(e) {
-      if (!started) return;
-      const pressed = e.key.toUpperCase();
-      const isCorrect = pressed === command.key;
-      const shouldSucceed = mode === 'normal' ? isCorrect : !isCorrect;
-
-      if (shouldSucceed) {
-        setScore((s) => s + 1);
-        setStreak((s) => s + 1);
-        if ((streak + 1) % 4 === 0) randomLine();
-        randomCommand();
-      } else {
-        endGame(mode === 'inverse' ? 'Wrong. In inverse mode you must press ANY OTHER key.' : 'Wrong key. Dolphin panic consumed you.');
-      }
+      handleInput(e.key);
     }
 
     window.addEventListener('keydown', onKey);
@@ -128,12 +132,20 @@ export default function App() {
             </div>
 
             {started && (
-              <div className="command">
-                <div className="label">COMMAND</div>
-                <div className="value">{command.label}</div>
-                <div className="hint">{command.hint}</div>
-                {mode === 'inverse' && <div className="warning">INVERSE: Press any key except {command.key}</div>}
-              </div>
+              <>
+                <div className="command">
+                  <div className="label">COMMAND</div>
+                  <div className="value">{command.label}</div>
+                  <div className="hint">{command.hint}</div>
+                  {mode === 'inverse' && <div className="warning">INVERSE: Press any key except {command.key}</div>}
+                </div>
+
+                <div className="touchControls">
+                  {COMMANDS.map((c) => (
+                    <button key={c.key} className="touchBtn" onClick={() => handleInput(c.key)}>{c.key}</button>
+                  ))}
+                </div>
+              </>
             )}
 
             <p className="narrator">🎙️ {narrator}</p>

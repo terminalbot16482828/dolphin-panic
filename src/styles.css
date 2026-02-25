@@ -19,5 +19,7 @@ button{border:0;border-radius:10px;padding:10px 14px;background:linear-gradient(
 .command .value{font-size:42px;font-weight:800;line-height:1.1}
 .command .hint{color:#aad0ff}
 .warning{margin-top:8px;color:#ffbe9f;font-weight:700}
+.touchControls{margin-top:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.touchBtn{margin-top:0;padding:14px 0;font-size:18px;border:1px solid #4f7dcc;background:#14254d}
 .narrator{margin-top:10px;color:#9dd0ff}
-@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.command .value{font-size:34px}}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.command .value{font-size:34px}.touchBtn{font-size:20px;padding:16px 0}}
